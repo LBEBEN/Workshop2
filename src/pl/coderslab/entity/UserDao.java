@@ -9,4 +9,8 @@ public class UserDao {
     private static final String UPDATE_USER_QUERY = "UPDATE users SET username = 'newUsername', email = 'newEmail', password = 'newPassword' WHERE id = ?";
     // delete - usuń
     private static final String DELETE_USER_QUERY = "DELETE FROM users WHERE id = ?";
+
+    public String hashPassword(String password){
+        return org.mindrot.jbcrypt.BCrypt.hashpw(password, org.mindrot.jbcrypt.BCrypt.gensalt());
+    }
 }
