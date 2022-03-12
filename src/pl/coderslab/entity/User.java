@@ -31,4 +31,10 @@ public class User {
     public String getPassword() {
         return password;
     }
+
+    @Override
+    public String toString() {
+        return "Użytkownik o id "+ id + " to " + userName + " o emailu '" + email + '\'' +
+                " i haśle " + password + ".";
+    }
 }

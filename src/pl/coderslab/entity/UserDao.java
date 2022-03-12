@@ -8,7 +8,7 @@ public class UserDao {
     // create - utwórz
     private static final String CREATE_USER_QUERY = "INSERT INTO users(username, email, password) VALUES (?,?,?);";
     // read - wyświetl
-    private static final String READ_FROM_DB_QUERY = "SELECT (id, username, email, password) FROM users;";
+    private static final String READ_FROM_DB_QUERY = "SELECT * FROM users WHERE id = ?;";
     // update - zaktualizuj
     private static final String UPDATE_USER_QUERY = "UPDATE users SET username = 'newUsername', email = 'newEmail', password = 'newPassword' WHERE id = ?";
     // delete - usuń
@@ -34,6 +34,28 @@ public class UserDao {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public User read(int userID){
+        try(Connection connection =DbUtil.ConnectionToWorkshop2()) {
+            PreparedStatement statement = connection.prepareStatement(READ_FROM_DB_QUERY);
+            statement.setString(1,String.valueOf(userID));
+            ResultSet resultSet = statement.executeQuery();
+            User user = new User();
+            if (resultSet.next()){
+                user.setId(resultSet.getInt("id"));
+                user.setUserName(resultSet.getString("username"));
+                user.setEmail(resultSet.getString("email"));
+                user.setPassword(resultSet.getString("password"));
+            }
+            return user;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+
+
     }
 
 }
