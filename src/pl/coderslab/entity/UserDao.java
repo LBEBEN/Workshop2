@@ -3,6 +3,7 @@ package pl.coderslab.entity;
 import pl.coderslab.DbUtil;
 
 import java.sql.*;
+import java.util.Arrays;
 
 public class UserDao {
     // create - utwórz
@@ -13,6 +14,8 @@ public class UserDao {
     private static final String UPDATE_USER_QUERY = "UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?";
     // delete - usuń
     private static final String DELETE_USER_QUERY = "DELETE FROM users WHERE id = ?";
+    // znajdź wszystkich
+    private static final String FIND_ALL = "SELECT * FROM users;";
 
     public String hashPassword(String password){
         return org.mindrot.jbcrypt.BCrypt.hashpw(password, org.mindrot.jbcrypt.BCrypt.gensalt());
@@ -80,6 +83,31 @@ public class UserDao {
             e.printStackTrace();
         }
         }
+
+        public User[] findAll(){
+        try(Connection connection = DbUtil.ConnectionToWorkshop2()){
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(FIND_ALL);
+            User[] users = new User[0];
+            while (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setUserName(resultSet.getString("username"));
+                user.setEmail(resultSet.getString("email"));
+                user.setPassword(resultSet.getString("password"));
+                users = Arrays.copyOf(users, users.length+1);
+                users[users.length-1] = user;
+            }
+            for(int i=0; i < users.length; i++){
+                System.out.println(users[i]);
+            }
+            return users;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     }
 
