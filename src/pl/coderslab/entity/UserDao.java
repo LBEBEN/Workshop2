@@ -10,7 +10,7 @@ public class UserDao {
     // read - wyświetl
     private static final String READ_FROM_DB_QUERY = "SELECT * FROM users WHERE id = ?;";
     // update - zaktualizuj
-    private static final String UPDATE_USER_QUERY = "UPDATE users SET username = 'newUsername', email = 'newEmail', password = 'newPassword' WHERE id = ?";
+    private static final String UPDATE_USER_QUERY = "UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?";
     // delete - usuń
     private static final String DELETE_USER_QUERY = "DELETE FROM users WHERE id = ?";
 
@@ -54,7 +54,21 @@ public class UserDao {
             e.printStackTrace();
             return null;
         }
-
+    }
+    public void update(User user){
+        try(Connection connection =DbUtil.ConnectionToWorkshop2()){
+            PreparedStatement statement = connection.prepareStatement(UPDATE_USER_QUERY);
+            statement.setString(1, user.getUserName());
+            statement.setString(2, user.getEmail());
+            statement.setString(3, hashPassword(user.getPassword()));
+            statement.setInt(4, user.getId());
+            statement.executeUpdate();
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+    public void delete(int userId){
 
     }
 
