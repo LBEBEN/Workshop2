@@ -13,4 +13,6 @@ public class UserDao {
     public String hashPassword(String password){
         return org.mindrot.jbcrypt.BCrypt.hashpw(password, org.mindrot.jbcrypt.BCrypt.gensalt());
     }
+
+
 }
