@@ -55,6 +55,7 @@ public class UserDao {
             return null;
         }
     }
+
     public void update(User user){
         try(Connection connection =DbUtil.ConnectionToWorkshop2()){
             PreparedStatement statement = connection.prepareStatement(UPDATE_USER_QUERY);
@@ -68,8 +69,18 @@ public class UserDao {
             e.printStackTrace();
         }
     }
+
     public void delete(int userId){
+        try (Connection connection = DbUtil.ConnectionToWorkshop2()){
+            PreparedStatement statement = connection.prepareStatement(DELETE_USER_QUERY);
+            statement.setInt(1, userId);
+            statement.executeUpdate();
+            }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        }
 
     }
 
-}
+
